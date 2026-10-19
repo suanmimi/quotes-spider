@@ -1,4 +1,4 @@
-import json
+import sqlite3
 from concurrent.futures import ThreadPoolExecutor
 
 import requests
@@ -41,9 +41,25 @@ def main():
     for content in all_rows:
         table += content
     print(len(table))
-    
-    with open("/tmp/quotes2.json", "w", encoding="utf-8") as file:
-        json.dump(table, file, ensure_ascii=False, indent=2)    
 
+    conn = sqlite3.connect("quotes.db")
+    cur = conn.cursor()
+    cur.execute(
+        """
+        CREATE TABLE IF NOT EXISTS quotes (
+            id INTEGER PRIMARY KEY, 
+            mingju TEXT UNIQUE, 
+            zuozhe TEXT
+            )
+        """
+        )   
+    for r in table:
+        cur.execute(
+            "INSERT OR IGNORE INTO quotes (mingju, zuozhe) VALUES (?, ?)",
+            (r["名句"], r["作者"]),
+        )
+    conn.commit()
+    conn.close()
+    
 if __name__ == "__main__":
     main()
