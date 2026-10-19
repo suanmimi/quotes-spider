@@ -8,3 +8,4 @@
 - ThreadPoolExecutor 并发，12.3s → 1.5s
 - 404 兜底 + 分批探测，未知页数自动停
 - pytest 覆盖解析逻辑，ruff + mypy + GitHub Actions
+- 数据落 SQLite，mingju 加唯一约束去重，重复跑幂等
